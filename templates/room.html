@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Axiora - Room {{ room_code }}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="header">
+            <div class="room-info">
+                <h2>💬 Room: {{ room_code }}</h2>
+                <div class="room-details">
+                    👤 {{ username }} | {{ pin_status }} | {{ owner_status }}
+                    <span class="badge {% if is_owner %}badge-owner{% endif %}">
+                        {% if is_owner %}
+                            👑 Owner
+                        {% else %}
+                            👤 Member
+                        {% endif %}
+                    </span>
+                    {% if pin_protected %}
+                        <span class="badge badge-pin">🔒 PIN</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="controls">
+                <button class="invite-btn" onclick="showInvite('{{ invite_token }}', '{{ room_code }}')">📋 Get Invite Token</button>
+                <button class="exit-btn" onclick="window.location.href='/'">🚪 Exit</button>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="messages-area">
+                <div class="messages" id="messages">
+                    <div class="message system">
+                        <div class="message-content">✨ Welcome to Axiora! ✨</div>
+                    </div>
+                </div>
+                <div class="input-area">
+                    <input type="text" id="message-input" placeholder="Type your message...">
+                    <button class="send-btn" onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <h3>👥 Members (<span id="member-count">0</span> online)</h3>
+                <div class="members-list" id="members-list"></div>
+                <div class="warning" id="warning"></div>
+            </div>
+        </div>
+        
+        <div class="status-bar" id="status">🟢 Connecting...</div>
+    </div>
+    
+    <!-- Pass data using data attributes -->
+    <div id="room-data" 
+         data-room-code="{{ room_code }}"
+         data-username="{{ username }}"
+         data-is-owner="{{ is_owner }}"
+         data-room-owner="{{ room_owner }}">
+    </div>
+    
+    <script src="/static/js/chat.js"></script>
+</body>
+</html>

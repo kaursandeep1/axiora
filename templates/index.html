@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Axiora - Real-time Chat Rooms</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="home-container">
+        <div class="home-header">
+            <h1>✨ Axiora</h1>
+            <p>Real-time Room-Based Chat</p>
+        </div>
+        <div class="form-container">
+            <div class="input-group">
+                <label>🏠 Room Code (4 digits)</label>
+                <input type="text" id="roomCode" maxlength="4" placeholder="e.g., 1234">
+            </div>
+            <div class="input-group">
+                <label>👤 Username (3-20 chars, letters & numbers only)</label>
+                <input type="text" id="username" maxlength="20" placeholder="Your name">
+            </div>
+            <div class="input-group">
+                <label>🔐 PIN (Optional - Set for new rooms)</label>
+                <input type="password" id="pin" placeholder="Leave empty for open room">
+            </div>
+            <div class="input-group">
+                <label>🎫 Invite Token (Optional)</label>
+                <input type="text" id="inviteToken" placeholder="Use invite token to join">
+            </div>
+            <button class="btn" onclick="joinRoom()">Join / Create Room</button>
+            
+            <div class="info">
+                <h4>📌 How to use:</h4>
+                <ul>
+                    <li>Enter any 4-digit room code (e.g., 1234)</li>
+                    <li>Enter a username (3-20 characters, letters/numbers only)</li>
+                    <li>Set a PIN to protect your room</li>
+                    <li>Share invite token with friends</li>
+                    <li>Room creator becomes the owner</li>
+                    <li>Owners can mute/remove users</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function joinRoom() {
+            let roomCode = document.getElementById("roomCode").value;
+            let username = document.getElementById("username").value;
+            let pin = document.getElementById("pin").value;
+            let inviteToken = document.getElementById("inviteToken").value;
+            
+            // Remove any spaces from room code
+            roomCode = roomCode.trim();
+            username = username.trim();
+            
+            // Validate room code
+            if (!roomCode) {
+                alert("Please enter a room code");
+                return;
+            }
+            
+            if (roomCode.length !== 4) {
+                alert("Room code must be exactly 4 digits");
+                return;
+            }
+            
+            if (!/^\d{4}$/.test(roomCode)) {
+                alert("Room code must contain only numbers (0-9)");
+                return;
+            }
+            
+            // Validate username
+            if (!username) {
+                alert("Please enter a username");
+                return;
+            }
+            
+            if (username.length < 3) {
+                alert("Username must be at least 3 characters long");
+                return;
+            }
+            
+            if (username.length > 20) {
+                alert("Username cannot be longer than 20 characters");
+                return;
+            }
+            
+            if (!/^[a-zA-Z0-9]+$/.test(username)) {
+                alert("Username can only contain letters (A-Z) and numbers (0-9). No spaces or special characters.");
+                return;
+            }
+            
+            // Build URL
+            let url = "/room/" + roomCode + "?username=" + encodeURIComponent(username);
+            if (pin) {
+                url += "&pin=" + encodeURIComponent(pin);
+            }
+            if (inviteToken) {
+                url += "&token=" + encodeURIComponent(inviteToken);
+            }
+            
+            console.log("Joining room:", url);
+            window.location.href = url;
+        }
+        
+        // Allow Enter key to submit
+        document.getElementById("roomCode").addEventListener("keypress", function(e) {
+            if (e.key === "Enter") joinRoom();
+        });
+        document.getElementById("username").addEventListener("keypress", function(e) {
+            if (e.key === "Enter") joinRoom();
+        });
+        document.getElementById("pin").addEventListener("keypress", function(e) {
+            if (e.key === "Enter") joinRoom();
+        });
+        
+        // Add input validation to show feedback
+        document.getElementById("username").addEventListener("input", function(e) {
+            let val = e.target.value;
+            let isValid = /^[a-zA-Z0-9]*$/.test(val) && val.length >= 3 && val.length <= 20;
+            if (val.length > 0 && !isValid) {
+                e.target.style.borderColor = "red";
+            } else {
+                e.target.style.borderColor = "#e0e0e0";
+            }
+        });
+    </script>
+</body>
+</html>
