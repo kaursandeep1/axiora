@@ -13,6 +13,10 @@ Axiora is a real-time, room-based chat application designed to deliver seamless 
 - **Responsive and modern UI design**
 - **Messages appear on right (sent) and left (received)**
 
+## 🚀 Live Demo
+
+https://github.com/user-attachments/assets/d0a02121-5861-4213-bb11-b04e61f4c0e5
+
 ## 🛠️ Tech Stack
 
 - **Backend:** FastAPI, Python
